@@ -30,7 +30,7 @@ function SetupDriveContent() {
     if (code && clientId && clientSecret) {
       handleExchangeCode(code);
     }
-  }, [code]);
+  }, [code, clientId, clientSecret]);
 
   const handleGetUrl = async (e: React.FormEvent) => {
     e.preventDefault();
