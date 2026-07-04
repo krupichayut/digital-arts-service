@@ -3,13 +3,24 @@ import { google } from "googleapis";
 import { Readable } from "stream";
 
 const getDriveService = () => {
-  // Read credentials from env
+  // Try OAuth 2.0 first (for Personal Gmail quota)
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const refreshToken = process.env.GOOGLE_REFRESH_TOKEN;
+
+  if (clientId && clientSecret && refreshToken) {
+    const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
+    oauth2Client.setCredentials({ refresh_token: refreshToken });
+    return google.drive({ version: "v3", auth: oauth2Client });
+  }
+
+  // Fallback to Service Account (For Workspace Shared Drives)
   const clientEmail = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   // Handle newline characters in the private key that might get escaped in env variables
   const privateKey = process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n');
 
   if (!clientEmail || !privateKey) {
-    throw new Error("Google Service Account credentials are not configured.");
+    throw new Error("Google API credentials are not configured. Please set GOOGLE_REFRESH_TOKEN or Service Account credentials.");
   }
 
   const auth = new google.auth.GoogleAuth({
