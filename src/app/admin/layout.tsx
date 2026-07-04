@@ -12,26 +12,26 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center mr-3 shadow-lg shadow-indigo-500/20">
             <Library className="w-4 h-4 text-white" />
           </div>
-          <span className="font-bold text-sm tracking-wide">Admin Workspace</span>
+          <span className="font-bold text-sm tracking-wide">ระบบจัดการหลังบ้าน</span>
         </div>
         
         {/* Navigation */}
         <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
           <Link href="/admin" className="flex items-center px-3 py-2.5 rounded-lg bg-white/5 text-white font-medium text-sm border border-white/5 shadow-sm">
             <LayoutDashboard className="w-4 h-4 mr-3 text-indigo-400" />
-            Media Overview
+            คลังสื่อการเรียนการสอน
           </Link>
           <Link href="/admin/academic" className="flex items-center px-3 py-2.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 font-medium text-sm transition-colors">
             <BookOpenCheck className="w-4 h-4 mr-3" />
-            Academic Works
+            ผลงานวิชาการ
           </Link>
           <Link href="/admin/teachers" className="flex items-center px-3 py-2.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 font-medium text-sm transition-colors">
             <Users className="w-4 h-4 mr-3" />
-            Teachers & Staff
+            ข้อมูลบุคลากร
           </Link>
           <Link href="/admin/settings" className="flex items-center px-3 py-2.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 font-medium text-sm transition-colors">
             <Settings className="w-4 h-4 mr-3" />
-            Platform Settings
+            ตั้งค่าแพลตฟอร์ม
           </Link>
         </nav>
         
@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         <div className="p-4 border-t border-white/5">
           <Link href="/dashboard" className="flex items-center px-3 py-2 text-sm text-zinc-400 hover:text-white transition-colors group">
             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
-            Back to Public App
+            กลับสู่หน้าเว็บไซต์หลัก
           </Link>
         </div>
       </aside>
@@ -50,9 +50,9 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         {/* Top Header */}
         <header className="h-16 sticky top-0 z-10 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5 px-8 flex items-center justify-between print:hidden">
           <div className="flex items-center text-sm text-zinc-400 font-medium">
-            <span>Admin</span>
+            <span>แอดมิน</span>
             <span className="mx-2 text-zinc-600">/</span>
-            <span className="text-white">Media Overview</span>
+            <span className="text-white">แผงควบคุม</span>
           </div>
           
           <div className="flex items-center gap-4">

@@ -93,7 +93,7 @@ export default function AdminPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this item? This action cannot be undone.")) {
+    if (confirm("คุณแน่ใจหรือไม่ว่าต้องการลบรายการนี้? การกระทำนี้ไม่สามารถย้อนกลับได้")) {
       await dbService.deleteMedia(id);
       await loadData();
     }
@@ -119,7 +119,7 @@ export default function AdminPage() {
           finalFileUrl = uploadResult.fileUrl;
         } else {
           console.error("Upload failed:", uploadResult.error);
-          alert("Failed to upload file to Google Drive: " + uploadResult.details);
+          alert("อัปโหลดไฟล์ไปที่ Google Drive ล้มเหลว: " + uploadResult.details);
           setUploading(false);
           return;
         }
@@ -151,7 +151,7 @@ export default function AdminPage() {
       await loadData();
     } catch (error) {
       console.error("Error submitting form:", error);
-      alert("Error saving data. Please check configuration.");
+      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาตรวจสอบการตั้งค่า");
     } finally {
       setUploading(false);
     }
@@ -201,21 +201,21 @@ export default function AdminPage() {
       value: health?.cdbs.provider || cdbsStatus.provider,
       ready: Boolean(health?.cdbs.provider || cdbsStatus.provider),
       icon: cdbsStatus.isRemote ? Cloud : HardDrive,
-      detail: cdbsStatus.isRemote ? "Cloud database active" : "Local fallback active",
+      detail: cdbsStatus.isRemote ? "ใช้งานฐานข้อมูล Cloud" : "ใช้งานฐานข้อมูล Local",
     },
     {
       label: "Google Drive",
-      value: driveReady ? "Ready" : "Needs config",
+      value: driveReady ? "พร้อมใช้งาน" : "ต้องตั้งค่า",
       ready: driveReady,
       icon: DownloadCloud,
-      detail: "File upload destination",
+      detail: "ระบบจัดเก็บไฟล์",
     },
     {
       label: "Google Sheets",
-      value: sheetsReady ? "Ready" : "Needs config",
+      value: sheetsReady ? "พร้อมใช้งาน" : "ต้องตั้งค่า",
       ready: sheetsReady,
       icon: FileText,
-      detail: "Report sync destination",
+      detail: "ระบบจัดเก็บข้อมูล (Database)",
     },
   ];
 
@@ -225,8 +225,8 @@ export default function AdminPage() {
       {/* Header Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Media Overview</h1>
-          <p className="text-sm text-zinc-400 mt-1">Manage and track all educational materials in the system.</p>
+          <h1 className="text-2xl font-bold text-white tracking-tight">คลังสื่อการเรียนการสอน</h1>
+          <p className="text-sm text-zinc-400 mt-1">จัดการและติดตามสื่อการสอนทั้งหมดในระบบ</p>
         </div>
         
         <div className="flex gap-3">
@@ -236,7 +236,7 @@ export default function AdminPage() {
             className="bg-[#0a0a0a] border-white/10 text-white hover:bg-white/5 hover:text-white"
           >
             <FileText className="w-4 h-4 mr-2" />
-            Export PDF
+            ออกรายงาน PDF
           </Button>
           
           <Dialog open={isDialogOpen} onOpenChange={(open) => {
@@ -246,80 +246,91 @@ export default function AdminPage() {
             <DialogTrigger render={
               <Button className="bg-white text-black hover:bg-zinc-200 shadow-lg shadow-white/10 font-medium">
                 <Plus className="w-4 h-4 mr-2" />
-                Add New Media
+                เพิ่มสื่อการสอน
               </Button>
             } />
             <DialogContent className="bg-[#0f0f11] border-white/10 text-white sm:max-w-2xl max-h-[90vh] overflow-y-auto p-0 rounded-2xl shadow-2xl">
               <div className="px-6 py-4 border-b border-white/5 bg-[#141417]">
                 <DialogTitle className="text-xl font-semibold text-white tracking-tight">
-                  {editingId ? "Edit Media Details" : "Create New Media"}
+                  {editingId ? "แก้ไขรายละเอียดสื่อ" : "สร้างสื่อการสอนใหม่"}
                 </DialogTitle>
-                <p className="text-xs text-zinc-400 mt-1">Fill in the information below to {editingId ? "update the" : "add a new"} learning resource.</p>
+                <p className="text-xs text-zinc-400 mt-1">กรอกข้อมูลด้านล่างเพื่อ{editingId ? "อัปเดต" : "เพิ่ม"}สื่อการเรียนรู้</p>
               </div>
               
               <form onSubmit={handleSubmit}>
                 <div className="p-6 space-y-6">
                   <div className="space-y-2">
-                    <Label htmlFor="title" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Title <span className="text-red-400">*</span></Label>
-                    <Input id="title" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" placeholder="e.g. Basic Watercolors for Beginners" />
+                    <Label htmlFor="title" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">ชื่อสื่อ <span className="text-red-400">*</span></Label>
+                    <Input id="title" required value={formData.title} onChange={e => setFormData({...formData, title: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" placeholder="เช่น สื่อประสม วิชาศิลปะ ป.1" />
                   </div>
                   
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="category" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Category</Label>
+                      <Label htmlFor="category" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">หมวดหมู่</Label>
                       <Select value={formData.category} onValueChange={v => setFormData({...formData, category: v || ''})}>
-                        <SelectTrigger className="bg-[#0a0a0a] border-white/10 text-white h-11"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="bg-[#0a0a0a] border-white/10 text-white h-11"><SelectValue placeholder="เลือกหมวดหมู่" /></SelectTrigger>
                         <SelectContent className="bg-[#141417] border-white/10 text-white">
-                          <SelectItem value="ทัศนศิลป์" className="hover:bg-white/5 focus:bg-white/10 cursor-pointer">ทัศนศิลป์ (Visual Arts)</SelectItem>
-                          <SelectItem value="ดนตรี" className="hover:bg-white/5 focus:bg-white/10 cursor-pointer">ดนตรี (Music)</SelectItem>
-                          <SelectItem value="นาฏศิลป์" className="hover:bg-white/5 focus:bg-white/10 cursor-pointer">นาฏศิลป์ (Dance)</SelectItem>
+                          <SelectItem value="ทัศนศิลป์" className="hover:bg-white/5 focus:bg-white/10 cursor-pointer">ทัศนศิลป์</SelectItem>
+                          <SelectItem value="ดนตรี" className="hover:bg-white/5 focus:bg-white/10 cursor-pointer">ดนตรี</SelectItem>
+                          <SelectItem value="นาฏศิลป์" className="hover:bg-white/5 focus:bg-white/10 cursor-pointer">นาฏศิลป์</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="grade" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Target Grade</Label>
+                      <Label htmlFor="grade" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">ระดับชั้น</Label>
                       <Select value={formData.grade} onValueChange={v => setFormData({...formData, grade: v || ''})}>
-                        <SelectTrigger className="bg-[#0a0a0a] border-white/10 text-white h-11"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="bg-[#0a0a0a] border-white/10 text-white h-11"><SelectValue placeholder="เลือกระดับชั้น" /></SelectTrigger>
                         <SelectContent className="bg-[#141417] border-white/10 text-white">
-                          <SelectItem value="ป.1" className="cursor-pointer">ป.1 (Grade 1)</SelectItem>
-                          <SelectItem value="ป.2" className="cursor-pointer">ป.2 (Grade 2)</SelectItem>
-                          <SelectItem value="ป.3" className="cursor-pointer">ป.3 (Grade 3)</SelectItem>
-                          <SelectItem value="ป.4" className="cursor-pointer">ป.4 (Grade 4)</SelectItem>
-                          <SelectItem value="ป.5" className="cursor-pointer">ป.5 (Grade 5)</SelectItem>
-                          <SelectItem value="ป.6" className="cursor-pointer">ป.6 (Grade 6)</SelectItem>
+                          <SelectItem value="ป.1" className="cursor-pointer">ป.1</SelectItem>
+                          <SelectItem value="ป.2" className="cursor-pointer">ป.2</SelectItem>
+                          <SelectItem value="ป.3" className="cursor-pointer">ป.3</SelectItem>
+                          <SelectItem value="ป.4" className="cursor-pointer">ป.4</SelectItem>
+                          <SelectItem value="ป.5" className="cursor-pointer">ป.5</SelectItem>
+                          <SelectItem value="ป.6" className="cursor-pointer">ป.6</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="type" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Media Type</Label>
+                      <Label htmlFor="type" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">ประเภทสื่อ</Label>
                       <Select value={formData.type} onValueChange={v => setFormData({...formData, type: v || ''})}>
-                        <SelectTrigger className="bg-[#0a0a0a] border-white/10 text-white h-11"><SelectValue placeholder="Select" /></SelectTrigger>
+                        <SelectTrigger className="bg-[#0a0a0a] border-white/10 text-white h-11"><SelectValue placeholder="เลือกประเภทสื่อ" /></SelectTrigger>
                         <SelectContent className="bg-[#141417] border-white/10 text-white">
-                          <SelectItem value="Video" className="cursor-pointer">Video</SelectItem>
-                          <SelectItem value="Worksheet" className="cursor-pointer">Worksheet</SelectItem>
-                          <SelectItem value="Slide" className="cursor-pointer">Slide</SelectItem>
-                          <SelectItem value="Plan" className="cursor-pointer">Lesson Plan</SelectItem>
-                          <SelectItem value="PDF" className="cursor-pointer">PDF Document</SelectItem>
+                          <SelectItem value="Video" className="cursor-pointer">วิดีโอ (Video)</SelectItem>
+                          <SelectItem value="Worksheet" className="cursor-pointer">ใบงาน (Worksheet)</SelectItem>
+                          <SelectItem value="Slide" className="cursor-pointer">สไลด์ (Slide)</SelectItem>
+                          <SelectItem value="Plan" className="cursor-pointer">แผนการสอน (Lesson Plan)</SelectItem>
+                          <SelectItem value="PDF" className="cursor-pointer">เอกสาร PDF</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </div>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                          <Label htmlFor="learningUnit" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">หน่วยการเรียนรู้</Label>
+                          <Input id="learningUnit" value={formData.learningUnit} onChange={e => setFormData({...formData, learningUnit: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" placeholder="เช่น หน่วยที่ 1 เรื่องสี" />
+                      </div>
+                      <div className="space-y-2">
+                          <Label htmlFor="standardCode" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">มาตรฐาน/ตัวชี้วัด</Label>
+                          <Input id="standardCode" value={formData.standardCode} onChange={e => setFormData({...formData, standardCode: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" placeholder="เช่น ศ 1.1 ป.1/1" />
+                      </div>
+                  </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="description" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Description</Label>
-                    <Input id="description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" placeholder="Brief summary of the content" />
+                    <Label htmlFor="description" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">คำอธิบาย</Label>
+                    <Input id="description" value={formData.description} onChange={e => setFormData({...formData, description: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" placeholder="สรุปเนื้อหาคร่าวๆ" />
                   </div>
 
                   {formData.type === 'Video' && (
                     <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="space-y-2 bg-indigo-500/5 border border-indigo-500/10 p-4 rounded-xl">
-                      <Label htmlFor="youtubeId" className="text-xs font-semibold uppercase tracking-wider text-indigo-300">YouTube Video ID</Label>
-                      <Input id="youtubeId" placeholder="e.g. dQw4w9WgXcQ" value={formData.youtubeId} onChange={e => setFormData({...formData, youtubeId: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" />
-                      <p className="text-xs text-indigo-400/70">The 11-character string after ?v= in a YouTube link.</p>
+                      <Label htmlFor="youtubeId" className="text-xs font-semibold uppercase tracking-wider text-indigo-300">รหัสวิดีโอ YouTube</Label>
+                      <Input id="youtubeId" placeholder="เช่น dQw4w9WgXcQ" value={formData.youtubeId} onChange={e => setFormData({...formData, youtubeId: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" />
+                      <p className="text-xs text-indigo-400/70">ข้อความ 11 ตัวอักษรหลัง ?v= ในลิงก์ YouTube</p>
                     </motion.div>
                   )}
 
                   <div className="space-y-2 border border-white/5 p-4 rounded-xl bg-[#1a1a1f]">
-                    <Label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Attach File (Upload to Drive) OR External Link</Label>
+                    <Label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">แนบไฟล์ (อัปโหลดเข้า Drive) หรือใช้ลิงก์ภายนอก</Label>
                     
                     <div className="flex flex-col gap-3">
                       <div className="flex items-center gap-2">
@@ -330,17 +341,17 @@ export default function AdminPage() {
                           className="bg-[#0a0a0a] border-white/10 text-white file:text-white file:bg-indigo-600 file:border-0 file:mr-4 file:px-4 hover:file:bg-indigo-700 cursor-pointer h-11 py-2"
                         />
                         {fileToUpload && (
-                          <Button type="button" variant="ghost" size="sm" onClick={() => { setFileToUpload(null); if(fileInputRef.current) fileInputRef.current.value = ''; }} className="text-red-400 hover:text-red-300 hover:bg-red-400/10">Clear</Button>
+                          <Button type="button" variant="ghost" size="sm" onClick={() => { setFileToUpload(null); if(fileInputRef.current) fileInputRef.current.value = ''; }} className="text-red-400 hover:text-red-300 hover:bg-red-400/10">ล้างไฟล์</Button>
                         )}
                       </div>
-                      <div className="text-center text-xs text-zinc-500 font-semibold uppercase">OR</div>
-                      <Input id="fileUrl" value={formData.fileUrl} onChange={e => setFormData({...formData, fileUrl: e.target.value})} disabled={!!fileToUpload} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11 disabled:opacity-50" placeholder="Paste existing URL (https://)" />
+                      <div className="text-center text-xs text-zinc-500 font-semibold uppercase">หรือ (OR)</div>
+                      <Input id="fileUrl" value={formData.fileUrl} onChange={e => setFormData({...formData, fileUrl: e.target.value})} disabled={!!fileToUpload} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11 disabled:opacity-50" placeholder="วางลิงก์ที่มีอยู่ (https://)" />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="tags" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">Tags</Label>
-                    <Input id="tags" placeholder="e.g. watercolor, basics, art (comma separated)" value={formData.tags} onChange={e => setFormData({...formData, tags: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" />
+                    <Label htmlFor="tags" className="text-xs font-semibold uppercase tracking-wider text-zinc-400">คำสำคัญ (Tags)</Label>
+                    <Input id="tags" placeholder="เช่น สีน้ำ, พื้นฐาน, ศิลปะ (คั่นด้วยลูกน้ำ)" value={formData.tags} onChange={e => setFormData({...formData, tags: e.target.value})} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11" />
                   </div>
 
                   <div className="pt-4 border-t border-white/5 space-y-4">
@@ -364,7 +375,7 @@ export default function AdminPage() {
                 </div>
                 
                 <div className="px-6 py-4 border-t border-white/5 bg-[#141417] flex justify-end gap-3 rounded-b-2xl">
-                  <Button type="button" variant="ghost" onClick={() => setIsDialogOpen(false)} className="hover:bg-white/5 hover:text-white text-zinc-400 border-none font-medium">Cancel</Button>
+                  <Button type="button" variant="ghost" onClick={() => setIsDialogOpen(false)} className="hover:bg-white/5 hover:text-white text-zinc-400 border-none font-medium">ยกเลิก</Button>
                   <Button type="submit" disabled={uploading} className="bg-white text-black hover:bg-zinc-200 font-semibold px-6 disabled:opacity-50 disabled:cursor-not-allowed">
                     {uploading ? (
                       <span className="flex items-center gap-2">
@@ -372,9 +383,9 @@ export default function AdminPage() {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
-                        Saving...
+                        กำลังบันทึก...
                       </span>
-                    ) : "Save Media"}
+                    ) : "บันทึกสื่อ"}
                   </Button>
                 </div>
               </form>
@@ -408,7 +419,7 @@ export default function AdminPage() {
                   ) : (
                     <AlertTriangle className="h-3.5 w-3.5" />
                   )}
-                  {card.ready ? "Online" : "Setup"}
+                  {card.ready ? "พร้อม" : "รอตั้งค่า"}
                 </div>
               </div>
               <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
@@ -427,7 +438,7 @@ export default function AdminPage() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-[#0f0f11] border border-white/5 rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-zinc-400 mb-1">Total Media</p>
+            <p className="text-sm font-medium text-zinc-400 mb-1">สื่อทั้งหมด</p>
             <h3 className="text-3xl font-bold text-white tracking-tight">{media.length}</h3>
           </div>
           <div className="w-12 h-12 rounded-full bg-indigo-500/10 flex items-center justify-center border border-indigo-500/20">
@@ -436,7 +447,7 @@ export default function AdminPage() {
         </div>
         <div className="bg-[#0f0f11] border border-white/5 rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-zinc-400 mb-1">Total Views</p>
+            <p className="text-sm font-medium text-zinc-400 mb-1">ยอดเข้าชมรวม</p>
             <h3 className="text-3xl font-bold text-white tracking-tight">{totalViews.toLocaleString()}</h3>
           </div>
           <div className="w-12 h-12 rounded-full bg-pink-500/10 flex items-center justify-center border border-pink-500/20">
@@ -445,7 +456,7 @@ export default function AdminPage() {
         </div>
         <div className="bg-[#0f0f11] border border-white/5 rounded-2xl p-6 shadow-sm flex items-center justify-between">
           <div>
-            <p className="text-sm font-medium text-zinc-400 mb-1">Total Downloads</p>
+            <p className="text-sm font-medium text-zinc-400 mb-1">ยอดดาวน์โหลดรวม</p>
             <h3 className="text-3xl font-bold text-white tracking-tight">{totalDownloads.toLocaleString()}</h3>
           </div>
           <div className="w-12 h-12 rounded-full bg-emerald-500/10 flex items-center justify-center border border-emerald-500/20">
@@ -457,26 +468,26 @@ export default function AdminPage() {
       {/* Data Table */}
       <div className="bg-[#0f0f11] border border-white/5 rounded-2xl shadow-sm overflow-hidden flex flex-col">
         <div className="px-6 py-5 border-b border-white/5 flex justify-between items-center">
-          <h3 className="text-base font-semibold text-white">Recent Media</h3>
+          <h3 className="text-base font-semibold text-white">สื่อที่อัปเดตล่าสุด</h3>
           <div className="text-xs text-zinc-500 font-medium px-3 py-1 bg-white/5 rounded-full border border-white/5">
-            Updated just now
+            อัปเดตเมื่อสักครู่
           </div>
         </div>
         
         <Table>
           <TableHeader className="bg-[#0a0a0a] border-b border-white/5">
             <TableRow className="border-b border-white/5 hover:bg-transparent">
-              <TableHead className="text-xs uppercase tracking-wider text-zinc-500 font-semibold w-[45%] h-12">Title</TableHead>
-              <TableHead className="text-xs uppercase tracking-wider text-zinc-500 font-semibold h-12">Type & Grade</TableHead>
-              <TableHead className="text-xs uppercase tracking-wider text-zinc-500 font-semibold text-right h-12">Performance</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider text-zinc-500 font-semibold w-[45%] h-12">ชื่อสื่อ</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider text-zinc-500 font-semibold h-12">ประเภทและระดับชั้น</TableHead>
+              <TableHead className="text-xs uppercase tracking-wider text-zinc-500 font-semibold text-right h-12">ประสิทธิภาพ</TableHead>
               <TableHead className="text-xs uppercase tracking-wider text-zinc-500 font-semibold text-right h-12 w-[120px]"></TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {loading ? (
-              <TableRow className="border-b border-white/5 hover:bg-transparent"><TableCell colSpan={4} className="text-center py-16 text-zinc-500 font-medium">Loading data...</TableCell></TableRow>
+              <TableRow className="border-b border-white/5 hover:bg-transparent"><TableCell colSpan={4} className="text-center py-16 text-zinc-500 font-medium">กำลังโหลดข้อมูล...</TableCell></TableRow>
             ) : media.length === 0 ? (
-              <TableRow className="border-b border-white/5 hover:bg-transparent"><TableCell colSpan={4} className="text-center py-16 text-zinc-500 font-medium">No media found in the database.</TableCell></TableRow>
+              <TableRow className="border-b border-white/5 hover:bg-transparent"><TableCell colSpan={4} className="text-center py-16 text-zinc-500 font-medium">ไม่พบสื่อในฐานข้อมูล</TableCell></TableRow>
             ) : media.map((item) => (
               <TableRow key={item.id} className="border-b border-white/5 hover:bg-white/[0.02] transition-colors group">
                 <TableCell className="py-4">

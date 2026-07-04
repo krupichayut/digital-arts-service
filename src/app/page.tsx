@@ -76,7 +76,7 @@ export default function Home() {
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white/10 border border-white/20 text-white mb-8 backdrop-blur-xl"
             >
               <Sparkles className="w-4 h-4 text-amber-300" />
-              <span className="text-sm font-medium tracking-wide">Digital Arts Learning Hub</span>
+              <span className="text-sm font-medium tracking-wide">ศูนย์กลางการเรียนรู้ศิลปะดิจิทัล</span>
             </motion.div>
             
             <motion.h1 
@@ -117,7 +117,7 @@ export default function Home() {
           </div>
         </motion.div>
       </section>
-
+ 
       {/* 2. Clean & Minimalist + 3. Bento Grid Section */}
       <section className="relative z-20 bg-slate-50 rounded-t-[3rem] -mt-10 pt-24 pb-32 px-6 lg:px-12 shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
         <div className="max-w-7xl mx-auto">
@@ -138,7 +138,7 @@ export default function Home() {
               ดูทั้งหมด <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-
+ 
           {loading ? (
             <div className="flex justify-center items-center py-32">
               <div className="w-12 h-12 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
@@ -162,7 +162,7 @@ export default function Home() {
                     {isHero && (
                       <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
                     )}
-
+ 
                     <div className="relative z-10 flex flex-col h-full">
                       {/* Top Bar */}
                       <div className="flex items-start justify-between mb-auto">
@@ -201,7 +201,7 @@ export default function Home() {
                           </p>
                         )}
                       </div>
-
+ 
                       {/* Bottom Action */}
                       <div className="mt-auto pt-6 flex items-center justify-between">
                         <div className="flex gap-4 text-sm font-medium">
@@ -230,11 +230,11 @@ export default function Home() {
           )}
         </div>
       </section>
-
+ 
       {/* Footer */}
       <footer className="bg-slate-900 text-slate-400 py-12 text-center">
         <p className="flex items-center justify-center gap-2">
-          Made with <Sparkles className="w-4 h-4 text-amber-400" /> for Teachers & Students
+          สร้างสรรค์ด้วยความตั้งใจเพื่อคุณครูและนักเรียน <Sparkles className="w-4 h-4 text-amber-400" />
         </p>
       </footer>
     </main>

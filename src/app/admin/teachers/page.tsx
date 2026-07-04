@@ -73,19 +73,19 @@ export default function TeachersAdminPage() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this teacher?")) return;
+    if (!confirm("คุณแน่ใจหรือไม่ว่าต้องการลบข้อมูลบุคลากรท่านนี้?")) return;
     try {
       await teacherService.deleteTeacher(id);
       await fetchTeachers();
     } catch (err) {
       console.error(err);
-      alert("Failed to delete.");
+      alert("ลบข้อมูลไม่สำเร็จ");
     }
   };
 
   const handleSave = async () => {
     if (!formData.name || !formData.position) {
-      alert("Please fill out required fields.");
+      alert("กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
       return;
     }
 
@@ -104,7 +104,7 @@ export default function TeachersAdminPage() {
 
         const uploadResult = await uploadRes.json();
         if (!uploadRes.ok || !uploadResult.success) {
-          throw new Error(uploadResult.error || "File upload failed");
+          throw new Error(uploadResult.error || "อัปโหลดไฟล์ล้มเหลว");
         }
         
         finalUrl = uploadResult.fileUrl;
@@ -122,7 +122,7 @@ export default function TeachersAdminPage() {
       await fetchTeachers();
     } catch (err) {
       console.error(err);
-      alert("Error saving data.");
+      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล");
     }
     setIsSaving(false);
   };
@@ -133,13 +133,13 @@ export default function TeachersAdminPage() {
         <div>
           <h1 className="text-2xl font-bold text-white tracking-tight flex items-center">
             <Users className="w-6 h-6 mr-3 text-indigo-400" />
-            Teachers & Staff
+            ข้อมูลบุคลากร
           </h1>
-          <p className="text-zinc-400 text-sm mt-1">Manage personnel data and profiles</p>
+          <p className="text-zinc-400 text-sm mt-1">จัดการรายชื่อ โปรไฟล์ และข้อมูลการติดต่อของคณะครู</p>
         </div>
         <Button onClick={handleOpenNew} className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20">
           <Plus className="w-4 h-4 mr-2" />
-          Add Personnel
+          เพิ่มข้อมูลบุคลากร
         </Button>
       </div>
 
@@ -147,7 +147,7 @@ export default function TeachersAdminPage() {
         <div className="relative max-w-md mb-6">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
           <Input 
-            placeholder="Search by name or subject group..." 
+            placeholder="ค้นหาด้วยชื่อ หรือ กลุ่มสาระฯ..." 
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="pl-10 bg-zinc-950 border-white/10 text-white placeholder:text-zinc-600 focus-visible:ring-indigo-500 h-11"
@@ -187,14 +187,14 @@ export default function TeachersAdminPage() {
                 <div className="p-4">
                   <h3 className="text-white font-semibold truncate">{t.name}</h3>
                   <p className="text-sm text-indigo-400 mt-1 truncate">{t.position}</p>
-                  <p className="text-xs text-zinc-500 mt-2">Group: {t.subjectGroup || "-"}</p>
-                  <p className="text-xs text-zinc-500 mt-1">Email: {t.email || "-"}</p>
+                  <p className="text-xs text-zinc-500 mt-2">กลุ่มสาระฯ: {t.subjectGroup || "-"}</p>
+                  <p className="text-xs text-zinc-500 mt-1">อีเมล: {t.email || "-"}</p>
                 </div>
               </motion.div>
             ))}
             {filteredTeachers.length === 0 && (
               <div className="col-span-full py-12 text-center text-zinc-500">
-                No personnel found.
+                ไม่พบข้อมูลบุคลากรในระบบ
               </div>
             )}
           </div>
@@ -212,40 +212,40 @@ export default function TeachersAdminPage() {
             >
               <div className="p-6 border-b border-white/5 bg-zinc-900/50">
                 <h2 className="text-xl font-bold text-white">
-                  {editingId ? "Edit Personnel" : "Add Personnel"}
+                  {editingId ? "แก้ไขข้อมูลบุคลากร" : "เพิ่มข้อมูลบุคลากร"}
                 </h2>
               </div>
               
               <div className="p-6 overflow-y-auto flex-1 space-y-4">
                 <div className="space-y-2">
-                  <Label>Name *</Label>
-                  <Input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="bg-zinc-900 border-white/10" />
+                  <Label>ชื่อ-นามสกุล <span className="text-red-400">*</span></Label>
+                  <Input value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} className="bg-zinc-900 border-white/10" placeholder="เช่น นายมานะ เรียนดี" />
                 </div>
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Position *</Label>
-                    <Input value={formData.position} onChange={e => setFormData({...formData, position: e.target.value})} className="bg-zinc-900 border-white/10" />
+                    <Label>ตำแหน่ง <span className="text-red-400">*</span></Label>
+                    <Input value={formData.position} onChange={e => setFormData({...formData, position: e.target.value})} className="bg-zinc-900 border-white/10" placeholder="เช่น ครูชำนาญการ" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Subject Group</Label>
-                    <Input value={formData.subjectGroup} onChange={e => setFormData({...formData, subjectGroup: e.target.value})} className="bg-zinc-900 border-white/10" />
+                    <Label>กลุ่มสาระการเรียนรู้</Label>
+                    <Input value={formData.subjectGroup} onChange={e => setFormData({...formData, subjectGroup: e.target.value})} className="bg-zinc-900 border-white/10" placeholder="เช่น ศิลปะ" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label>Email</Label>
+                    <Label>อีเมล</Label>
                     <Input value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} className="bg-zinc-900 border-white/10" />
                   </div>
                   <div className="space-y-2">
-                    <Label>Phone</Label>
+                    <Label>เบอร์โทรศัพท์</Label>
                     <Input value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} className="bg-zinc-900 border-white/10" />
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <Label>Profile Image</Label>
+                  <Label>รูปภาพโปรไฟล์</Label>
                   <div className="flex gap-2 items-center">
                     <input 
                       type="file" 
@@ -265,13 +265,13 @@ export default function TeachersAdminPage() {
                       onClick={() => fileInputRef.current?.click()}
                     >
                       <ImageIcon className="w-4 h-4 mr-2" />
-                      {fileToUpload ? "Change File" : "Upload Image"}
+                      {fileToUpload ? "เปลี่ยนรูป" : "อัปโหลดรูปภาพ"}
                     </Button>
                     <span className="text-xs text-zinc-500 truncate max-w-[200px]">
-                      {fileToUpload ? fileToUpload.name : (formData.profileImageUrl && formData.profileImageUrl !== "-" ? "Existing Image URL" : "No image selected")}
+                      {fileToUpload ? fileToUpload.name : (formData.profileImageUrl && formData.profileImageUrl !== "-" ? "มีรูปลิงก์ภายนอกแล้ว" : "ยังไม่ได้เลือกไฟล์")}
                     </span>
                   </div>
-                  <p className="text-xs text-zinc-600 mt-1">Or paste a URL below:</p>
+                  <p className="text-xs text-zinc-600 mt-1">หรือวางลิงก์รูปภาพ (URL) ด้านล่าง:</p>
                   <Input 
                     value={formData.profileImageUrl} 
                     onChange={e => setFormData({...formData, profileImageUrl: e.target.value})} 
@@ -283,10 +283,10 @@ export default function TeachersAdminPage() {
               </div>
               
               <div className="p-6 border-t border-white/5 bg-zinc-900/30 flex justify-end gap-3">
-                <Button variant="ghost" onClick={() => setIsDialogOpen(false)} disabled={isSaving} className="hover:bg-white/5">Cancel</Button>
+                <Button variant="ghost" onClick={() => setIsDialogOpen(false)} disabled={isSaving} className="hover:bg-white/5">ยกเลิก</Button>
                 <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-700 text-white">
                   {isSaving ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
-                  {editingId ? "Update" : "Save"}
+                  {editingId ? "บันทึกการแก้ไข" : "บันทึกข้อมูล"}
                 </Button>
               </div>
             </motion.div>

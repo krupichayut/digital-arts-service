@@ -106,13 +106,13 @@ export default function DashboardPage() {
           className="mt-4 grid w-full max-w-2xl grid-cols-1 gap-3 sm:grid-cols-2"
         >
           <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-            Grade
+            ระดับชั้น
             <select
               value={filterGrade}
               onChange={(event) => setFilterGrade(event.target.value)}
               className="h-11 rounded-xl border border-white/10 bg-zinc-900/80 px-3 text-sm font-medium normal-case tracking-normal text-zinc-200 outline-none transition-colors hover:border-white/20 focus:border-indigo-400"
             >
-              <option value="All">All grades</option>
+              <option value="All">ทุกระดับชั้น</option>
               {grades.map((grade) => (
                 <option key={grade} value={grade}>
                   {grade}
@@ -122,16 +122,16 @@ export default function DashboardPage() {
           </label>
 
           <label className="flex flex-col gap-1 text-xs font-semibold uppercase tracking-wide text-zinc-500">
-            Sort
+            เรียงลำดับ
             <select
               value={sortBy}
               onChange={(event) => setSortBy(event.target.value)}
               className="h-11 rounded-xl border border-white/10 bg-zinc-900/80 px-3 text-sm font-medium normal-case tracking-normal text-zinc-200 outline-none transition-colors hover:border-white/20 focus:border-indigo-400"
             >
-              <option value="newest">Newest first</option>
-              <option value="views">Most viewed</option>
-              <option value="downloads">Most downloaded</option>
-              <option value="title">Title A-Z</option>
+              <option value="newest">ใหม่ล่าสุด</option>
+              <option value="views">เข้าชมมากที่สุด</option>
+              <option value="downloads">ดาวน์โหลดมากที่สุด</option>
+              <option value="title">ชื่อสื่อ ก-ฮ</option>
             </select>
           </label>
         </motion.div>
@@ -170,7 +170,7 @@ export default function DashboardPage() {
 
         {!loading && (
           <div className="mt-4 text-xs font-medium text-zinc-500">
-            Showing {filteredMedia.length.toLocaleString()} of {media.length.toLocaleString()} resources
+            แสดง {filteredMedia.length.toLocaleString()} จากทั้งหมด {media.length.toLocaleString()} รายการ
           </div>
         )}
       </div>

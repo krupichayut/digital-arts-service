@@ -124,7 +124,7 @@ export default function AdminAcademicPage() {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-white">
-            Academic Publications
+            ผลงานวิชาการ
           </h1>
           <p className="mt-1 text-sm text-zinc-400">
             จัดการพื้นที่เผยแพร่งานวิจัย บทความ นวัตกรรม และ Best Practice
@@ -133,7 +133,7 @@ export default function AdminAcademicPage() {
 
         <div className="flex items-center gap-2 rounded-xl border border-white/5 bg-white/5 px-4 py-3 text-sm font-semibold text-zinc-300">
           <BookOpenCheck className="h-4 w-4 text-indigo-300" />
-          {works.length.toLocaleString()} works
+          {works.length.toLocaleString()} รายการ
         </div>
       </div>
 
@@ -145,7 +145,7 @@ export default function AdminAcademicPage() {
           <div className="flex items-center justify-between">
             <div>
               <h2 className="font-bold text-white">
-                {editingId ? "Edit Publication" : "New Publication"}
+                {editingId ? "แก้ไขผลงานวิชาการ" : "เพิ่มผลงานวิชาการ"}
               </h2>
               <p className="mt-1 text-xs text-zinc-500">
                 ข้อมูลนี้จะแสดงในหน้าเผยแพร่งานวิชาการ
@@ -155,7 +155,7 @@ export default function AdminAcademicPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="title">Title</Label>
+            <Label htmlFor="title">ชื่อผลงาน</Label>
             <Input
               id="title"
               required
@@ -169,7 +169,7 @@ export default function AdminAcademicPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="author">Author</Label>
+            <Label htmlFor="author">ชื่อผู้แต่ง/ผู้จัดทำ</Label>
             <Input
               id="author"
               required
@@ -178,13 +178,13 @@ export default function AdminAcademicPage() {
                 setFormData({ ...formData, author: event.target.value })
               }
               className="border-white/10 bg-[#0a0a0a] text-white"
-              placeholder="ชื่อผู้จัดทำ"
+              placeholder="ชื่อผู้แต่ง"
             />
           </div>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <label className="space-y-2 text-sm font-medium text-zinc-300">
-              Type
+              ประเภทงานวิชาการ
               <select
                 value={formData.workType}
                 onChange={(event) =>
@@ -200,7 +200,7 @@ export default function AdminAcademicPage() {
             </label>
 
             <div className="space-y-2">
-              <Label htmlFor="academicYear">Academic Year</Label>
+              <Label htmlFor="academicYear">ปีการศึกษา</Label>
               <Input
                 id="academicYear"
                 value={formData.academicYear}
@@ -216,7 +216,7 @@ export default function AdminAcademicPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="subjectArea">Subject Area</Label>
+            <Label htmlFor="subjectArea">กลุ่มสาระการเรียนรู้</Label>
             <Input
               id="subjectArea"
               value={formData.subjectArea}
@@ -229,7 +229,7 @@ export default function AdminAcademicPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="abstract">Abstract</Label>
+            <Label htmlFor="abstract">บทคัดย่อ</Label>
             <textarea
               id="abstract"
               required
@@ -244,7 +244,7 @@ export default function AdminAcademicPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="keywords">Keywords</Label>
+            <Label htmlFor="keywords">คำสำคัญ (Keywords)</Label>
             <Input
               id="keywords"
               value={formData.keywords}
@@ -257,7 +257,7 @@ export default function AdminAcademicPage() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="publicationUrl">Publication URL</Label>
+            <Label htmlFor="publicationUrl">ลิงก์ผลงานวิชาการ (URL)</Label>
             <Input
               id="publicationUrl"
               value={formData.publicationUrl}
@@ -274,7 +274,7 @@ export default function AdminAcademicPage() {
 
           <div className="flex gap-3 pt-2">
             <Button type="submit" className="bg-white text-black hover:bg-zinc-200">
-              {editingId ? "Update" : "Publish"}
+              {editingId ? "อัปเดต" : "บันทึกข้อมูล"}
             </Button>
             {editingId && (
               <Button
@@ -283,7 +283,7 @@ export default function AdminAcademicPage() {
                 onClick={resetForm}
                 className="text-zinc-400 hover:bg-white/5 hover:text-white"
               >
-                Cancel
+                ยกเลิก
               </Button>
             )}
           </div>
@@ -296,7 +296,7 @@ export default function AdminAcademicPage() {
               <input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search publications"
+                placeholder="ค้นหาผลงานวิชาการ..."
                 className="h-full w-full bg-transparent text-sm text-white outline-none placeholder:text-zinc-600"
               />
             </div>
@@ -305,11 +305,11 @@ export default function AdminAcademicPage() {
           <div className="divide-y divide-white/5">
             {loading ? (
               <div className="p-10 text-center text-sm text-zinc-500">
-                Loading publications...
+                กำลังโหลดข้อมูล...
               </div>
             ) : filteredWorks.length === 0 ? (
               <div className="p-10 text-center text-sm text-zinc-500">
-                No academic publications found.
+                ไม่พบผลงานวิชาการ
               </div>
             ) : (
               filteredWorks.map((item) => (
@@ -333,7 +333,7 @@ export default function AdminAcademicPage() {
                     </p>
                     <div className="mt-3 flex items-center gap-2 text-xs text-zinc-500">
                       <Eye className="h-3.5 w-3.5" />
-                      {item.viewCount.toLocaleString()} views
+                      {item.viewCount.toLocaleString()} ครั้ง
                     </div>
                   </div>
 

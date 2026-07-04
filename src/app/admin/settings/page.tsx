@@ -46,7 +46,7 @@ export default function SettingsAdminPage() {
 
   const handleSave = async () => {
     if (!formData.schoolName) {
-      alert("Please provide a School Name.");
+      alert("กรุณาระบุชื่อโรงเรียน/องค์กร");
       return;
     }
 
@@ -66,7 +66,7 @@ export default function SettingsAdminPage() {
 
         const uploadResult = await uploadRes.json();
         if (!uploadRes.ok || !uploadResult.success) {
-          throw new Error(uploadResult.error || "File upload failed");
+          throw new Error(uploadResult.error || "อัปโหลดไฟล์ล้มเหลว");
         }
         
         finalUrl = uploadResult.fileUrl;
@@ -88,7 +88,7 @@ export default function SettingsAdminPage() {
       setTimeout(() => setSuccessMsg(false), 3000);
     } catch (err) {
       console.error(err);
-      alert("Error saving settings.");
+      alert("เกิดข้อผิดพลาดในการบันทึกการตั้งค่า");
     }
     setIsSaving(false);
   };
@@ -99,9 +99,9 @@ export default function SettingsAdminPage() {
         <div>
           <h1 className="text-2xl font-bold text-white tracking-tight flex items-center">
             <Settings className="w-6 h-6 mr-3 text-indigo-400" />
-            Platform Settings
+            ตั้งค่าแพลตฟอร์ม
           </h1>
-          <p className="text-zinc-400 text-sm mt-1">Configure global application preferences</p>
+          <p className="text-zinc-400 text-sm mt-1">กำหนดค่าเริ่มต้น ชื่อโรงเรียน โลโก้ และโทนสีของเว็บไซต์</p>
         </div>
       </div>
 
@@ -115,20 +115,20 @@ export default function SettingsAdminPage() {
             
             {/* General Settings */}
             <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-white border-b border-white/5 pb-2">General Information</h2>
+                <h2 className="text-lg font-semibold text-white border-b border-white/5 pb-2">ข้อมูลทั่วไป</h2>
                 
                 <div className="space-y-2">
-                    <Label>School / Organization Name</Label>
+                    <Label>ชื่อโรงเรียน / องค์กร</Label>
                     <Input 
                         value={formData.schoolName} 
                         onChange={e => setFormData({...formData, schoolName: e.target.value})} 
                         className="bg-zinc-950 border-white/10 max-w-md" 
                     />
-                    <p className="text-xs text-zinc-500">This name will be displayed in the header and reports.</p>
+                    <p className="text-xs text-zinc-500">ชื่อนี้จะไปปรากฏบนแถบหัวเว็บและในเอกสารรายงาน</p>
                 </div>
                 
                 <div className="space-y-2">
-                    <Label>Current Academic Year</Label>
+                    <Label>ปีการศึกษาปัจจุบัน</Label>
                     <Input 
                         value={formData.academicYear} 
                         onChange={e => setFormData({...formData, academicYear: e.target.value})} 
@@ -139,10 +139,10 @@ export default function SettingsAdminPage() {
 
             {/* Branding Settings */}
             <div className="space-y-6">
-                <h2 className="text-lg font-semibold text-white border-b border-white/5 pb-2 mt-8">Branding</h2>
+                <h2 className="text-lg font-semibold text-white border-b border-white/5 pb-2 mt-8">การปรับแต่ง (Branding)</h2>
                 
                 <div className="space-y-2">
-                  <Label>School Logo</Label>
+                  <Label>ตราสัญลักษณ์โรงเรียน (Logo)</Label>
                   <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center mt-2">
                     <div className="w-20 h-20 bg-zinc-950 rounded-lg border border-white/10 flex items-center justify-center overflow-hidden shrink-0">
                         {fileToUpload ? (
@@ -172,12 +172,12 @@ export default function SettingsAdminPage() {
                             onClick={() => fileInputRef.current?.click()}
                         >
                             <ImageIcon className="w-4 h-4 mr-2" />
-                            {fileToUpload || formData.logoUrl ? "Change Logo" : "Upload Logo"}
+                            {fileToUpload || formData.logoUrl ? "เปลี่ยนโลโก้" : "อัปโหลดโลโก้"}
                         </Button>
-                        <p className="text-xs text-zinc-500">Recommended size: 200x200px. Transparent PNG.</p>
+                        <p className="text-xs text-zinc-500">แนะนำขนาด: 200x200px ไฟล์โปร่งใส (PNG)</p>
                         
                         <div className="pt-2">
-                            <Label className="text-xs text-zinc-500 mb-1 block">Or use image URL:</Label>
+                            <Label className="text-xs text-zinc-500 mb-1 block">หรือใส่ลิงก์รูปภาพ (URL):</Label>
                             <Input 
                                 value={formData.logoUrl} 
                                 onChange={e => setFormData({...formData, logoUrl: e.target.value})} 
@@ -191,7 +191,7 @@ export default function SettingsAdminPage() {
                 </div>
                 
                 <div className="space-y-2 max-w-md">
-                    <Label>Theme Color</Label>
+                    <Label>โทนสีหลักของเว็บไซต์ (Theme Color)</Label>
                     <div className="flex gap-3 items-center">
                         <input 
                             type="color" 
@@ -205,7 +205,7 @@ export default function SettingsAdminPage() {
                             className="bg-zinc-950 border-white/10 font-mono"
                         />
                     </div>
-                    <p className="text-xs text-zinc-500">Select the primary color for the platform.</p>
+                    <p className="text-xs text-zinc-500">เลือกสีหลักที่เข้ากับสีประจำโรงเรียน</p>
                 </div>
             </div>
 
@@ -220,13 +220,13 @@ export default function SettingsAdminPage() {
                     ) : (
                         <Save className="w-4 h-4 mr-2" />
                     )}
-                    Save Settings
+                    บันทึกการตั้งค่า
                 </Button>
                 
                 {successMsg && (
                     <span className="flex items-center text-emerald-400 text-sm font-medium animate-in fade-in zoom-in duration-300">
                         <CheckCircle2 className="w-4 h-4 mr-1.5" />
-                        Settings saved successfully
+                        บันทึกการตั้งค่าสำเร็จแล้ว
                     </span>
                 )}
             </div>
