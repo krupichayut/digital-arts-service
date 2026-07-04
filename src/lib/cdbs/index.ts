@@ -3,8 +3,14 @@
 import { GoogleSheetsCdbsProvider } from "./google-sheets-provider";
 import { LocalCdbsProvider } from "./local-provider";
 import type { CdbsProvider, MediaInput, MediaItem } from "./types";
+import { academicWorkService } from "./academic";
+import { teacherService } from "./teachers";
+import { settingsService } from "./settings";
+import type { AcademicWork, AcademicWorkInput } from "./academic";
+import type { Teacher, TeacherInput } from "./teachers";
+import type { PlatformSettings, PlatformSettingsInput } from "./settings";
 
-export type { CdbsProvider, MediaInput, MediaItem };
+export type { CdbsProvider, MediaInput, MediaItem, AcademicWork, AcademicWorkInput, Teacher, TeacherInput, PlatformSettings, PlatformSettingsInput };
 
 const localProvider = new LocalCdbsProvider(
   process.env.NEXT_PUBLIC_CDBS_LOCAL_STORAGE_KEY || "artclass_media_v2"
@@ -109,3 +115,5 @@ export const cdbsStatus = {
   isRemote: cdbsService.isRemote,
   requestedProvider,
 };
+
+export { academicWorkService, teacherService, settingsService };

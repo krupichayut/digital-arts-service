@@ -25,11 +25,11 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <BookOpenCheck className="w-4 h-4 mr-3" />
             Academic Works
           </Link>
-          <Link href="#" className="flex items-center px-3 py-2.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 font-medium text-sm transition-colors">
+          <Link href="/admin/teachers" className="flex items-center px-3 py-2.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 font-medium text-sm transition-colors">
             <Users className="w-4 h-4 mr-3" />
             Teachers & Staff
           </Link>
-          <Link href="#" className="flex items-center px-3 py-2.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 font-medium text-sm transition-colors">
+          <Link href="/admin/settings" className="flex items-center px-3 py-2.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/5 font-medium text-sm transition-colors">
             <Settings className="w-4 h-4 mr-3" />
             Platform Settings
           </Link>
