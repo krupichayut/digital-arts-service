@@ -122,7 +122,7 @@ export default function AdminPage() {
         if (uploadResult.success) {
           finalFileUrl = uploadResult.fileUrl;
         } else {
-          console.error("Upload failed:", uploadResult.error);
+          console.error("Upload failed:", uploadResult.error, uploadResult.details);
           alert("อัปโหลดไฟล์ไปที่ Google Drive ล้มเหลว: " + uploadResult.details);
           setUploading(false);
           return;
