@@ -140,13 +140,20 @@ export default function AdminPage() {
         });
         const uploadResult = await uploadRes.json();
         if (uploadResult.success) {
-          finalCoverUrl = uploadResult.fileUrl;
+          finalCoverUrl = `https://drive.google.com/uc?id=${uploadResult.fileId}`;
         } else {
           console.error("Cover upload failed:", uploadResult.error);
           alert("อัปโหลดรูปภาพหน้าปกไปที่ Google Drive ล้มเหลว: " + uploadResult.details);
           setUploading(false);
           return;
         }
+      }
+
+      // Extract YouTube ID if user pasted full URL
+      let finalYoutubeId = "-";
+      if (formData.type === 'Video' && formData.youtubeId) {
+        const ytMatch = formData.youtubeId.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+        finalYoutubeId = ytMatch ? ytMatch[1] : formData.youtubeId;
       }
 
       const dataToSave = {
@@ -156,7 +163,7 @@ export default function AdminPage() {
         standardCode: formData.standardCode || "-",
         fileUrl: finalFileUrl || "-",
         coverUrl: finalCoverUrl || "-",
-        youtubeId: formData.type === 'Video' ? (formData.youtubeId || "-") : "-",
+        youtubeId: finalYoutubeId || "-",
         tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
         studentResults: formData.studentResults || "-",
         problems: formData.problems || "-",
