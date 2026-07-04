@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { BookOpenCheck, LayoutDashboard, Library, Settings, Users, ArrowLeft, Search, Bell } from "lucide-react";
+import { LogoutButton } from "@/components/logout-button";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -41,6 +42,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             <ArrowLeft className="w-4 h-4 mr-2 group-hover:-translate-x-1 transition-transform" />
             กลับสู่หน้าเว็บไซต์หลัก
           </Link>
+          <LogoutButton />
         </div>
       </aside>
 

@@ -27,14 +27,21 @@ export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
     const file = formData.get("file") as File;
-    const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
+    const rawFolderId = process.env.GOOGLE_DRIVE_FOLDER_ID;
 
     if (!file) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
-    if (!folderId) {
+    if (!rawFolderId) {
       return NextResponse.json({ error: "Google Drive Folder ID is not configured" }, { status: 500 });
+    }
+
+    // Extract ID if user accidentally pasted the full URL
+    let folderId = rawFolderId;
+    const match = rawFolderId.match(/folders\/([a-zA-Z0-9_-]+)/) || rawFolderId.match(/id=([a-zA-Z0-9_-]+)/);
+    if (match && match[1]) {
+      folderId = match[1];
     }
 
     const drive = getDriveService();
@@ -60,6 +67,7 @@ export async function POST(req: NextRequest) {
       requestBody: fileMetadata,
       media: media,
       fields: "id, webViewLink",
+      supportsAllDrives: true,
     });
 
     const fileId = response.data.id;
@@ -72,6 +80,7 @@ export async function POST(req: NextRequest) {
           role: 'reader',
           type: 'anyone',
         },
+        supportsAllDrives: true,
       });
     }
 
