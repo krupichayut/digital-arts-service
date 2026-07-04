@@ -8,19 +8,13 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { Plus, Edit2, Trash2, FileText, BarChart3, DownloadCloud, MoreHorizontal, Video, Image as ImageIcon, Library, Database, Cloud, HardDrive, CheckCircle2, AlertTriangle } from "lucide-react";
+import { Plus, Edit2, Trash2, FileText, BarChart3, DownloadCloud, MoreHorizontal, Video, Image as ImageIcon, Library, Cloud, HardDrive, CheckCircle2, AlertTriangle } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface HealthStatus {
   checkedAt: string;
   cdbs: {
     provider: string;
-  };
-  appwrite: {
-    endpoint: boolean;
-    project: boolean;
-    database: boolean;
-    collection: string;
   };
   google: {
     serviceAccount: boolean;
@@ -195,11 +189,6 @@ export default function AdminPage() {
     }
   };
 
-  const appwriteReady = Boolean(
-    health?.appwrite.endpoint &&
-      health.appwrite.project &&
-      health.appwrite.database
-  );
   const driveReady = Boolean(
     health?.google.serviceAccount && health.google.driveFolder
   );
@@ -213,13 +202,6 @@ export default function AdminPage() {
       ready: Boolean(health?.cdbs.provider || cdbsStatus.provider),
       icon: cdbsStatus.isRemote ? Cloud : HardDrive,
       detail: cdbsStatus.isRemote ? "Cloud database active" : "Local fallback active",
-    },
-    {
-      label: "Appwrite",
-      value: appwriteReady ? "Ready" : "Needs config",
-      ready: appwriteReady,
-      icon: Database,
-      detail: `Collection: ${health?.appwrite.collection || "media"}`,
     },
     {
       label: "Google Drive",
@@ -402,7 +384,7 @@ export default function AdminPage() {
       </div>
 
       {/* System Health */}
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {healthCards.map((card) => {
           const Icon = card.icon;
           return (
