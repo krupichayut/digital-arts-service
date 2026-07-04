@@ -196,7 +196,10 @@ export default function DashboardPage() {
               >
                 {/* Premium Image Container */}
                 <div className="relative aspect-[16/10] bg-zinc-950 overflow-hidden">
-                  {item.type === 'Video' && item.youtubeId !== '-' ? (
+                  {item.coverUrl && item.coverUrl !== '-' ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={item.coverUrl} alt={item.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100" />
+                  ) : item.type === 'Video' && item.youtubeId !== '-' ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={`https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg`} alt={item.title} className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100" />
                   ) : (

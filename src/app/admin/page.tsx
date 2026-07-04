@@ -30,8 +30,10 @@ export default function AdminPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const [fileToUpload, setFileToUpload] = useState<File | null>(null);
+  const [coverToUpload, setCoverToUpload] = useState<File | null>(null);
   const [health, setHealth] = useState<HealthStatus | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const coverInputRef = useRef<HTMLInputElement>(null);
 
   // Metrics
   const totalViews = media.reduce((acc, curr) => acc + curr.viewCount, 0);
@@ -46,6 +48,7 @@ export default function AdminPage() {
     learningUnit: "",
     standardCode: "",
     fileUrl: "",
+    coverUrl: "",
     youtubeId: "",
     tags: "",
     description: "",
@@ -81,6 +84,7 @@ export default function AdminPage() {
       learningUnit: item.learningUnit,
       standardCode: item.standardCode,
       fileUrl: item.fileUrl === '-' ? '' : item.fileUrl,
+      coverUrl: item.coverUrl === '-' ? '' : item.coverUrl || "",
       youtubeId: item.youtubeId === '-' ? '' : item.youtubeId,
       tags: item.tags.join(', '),
       description: item.description,
@@ -125,12 +129,33 @@ export default function AdminPage() {
         }
       }
 
+      let finalCoverUrl = formData.coverUrl;
+      if (coverToUpload) {
+        const uploadData = new FormData();
+        uploadData.append("file", coverToUpload);
+
+        const uploadRes = await fetch("/api/upload-drive", {
+          method: "POST",
+          body: uploadData,
+        });
+        const uploadResult = await uploadRes.json();
+        if (uploadResult.success) {
+          finalCoverUrl = uploadResult.fileUrl;
+        } else {
+          console.error("Cover upload failed:", uploadResult.error);
+          alert("อัปโหลดรูปภาพหน้าปกไปที่ Google Drive ล้มเหลว: " + uploadResult.details);
+          setUploading(false);
+          return;
+        }
+      }
+
       const dataToSave = {
         ...formData,
         subCategory: formData.subCategory || "-",
         learningUnit: formData.learningUnit || "-",
         standardCode: formData.standardCode || "-",
         fileUrl: finalFileUrl || "-",
+        coverUrl: finalCoverUrl || "-",
         youtubeId: formData.type === 'Video' ? (formData.youtubeId || "-") : "-",
         tags: formData.tags.split(',').map(t => t.trim()).filter(Boolean),
         studentResults: formData.studentResults || "-",
@@ -147,7 +172,8 @@ export default function AdminPage() {
       setIsDialogOpen(false);
       setEditingId(null);
       setFileToUpload(null);
-      setFormData(prev => ({ ...prev, fileUrl: finalFileUrl }));
+      setCoverToUpload(null);
+      setFormData(prev => ({ ...prev, fileUrl: finalFileUrl, coverUrl: finalCoverUrl }));
       await loadData();
     } catch (error) {
       console.error("Error submitting form:", error);
@@ -167,6 +193,7 @@ export default function AdminPage() {
       learningUnit: "",
       standardCode: "",
       fileUrl: "",
+      coverUrl: "",
       youtubeId: "",
       tags: "",
       description: "",
@@ -176,7 +203,9 @@ export default function AdminPage() {
     });
     setEditingId(null);
     setFileToUpload(null);
+    setCoverToUpload(null);
     if(fileInputRef.current) fileInputRef.current.value = '';
+    if(coverInputRef.current) coverInputRef.current.value = '';
   };
 
   const getTypeIcon = (type: string) => {
@@ -330,7 +359,28 @@ export default function AdminPage() {
                   )}
 
                   <div className="space-y-2 border border-white/5 p-4 rounded-xl bg-[#1a1a1f]">
-                    <Label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">แนบไฟล์ (อัปโหลดเข้า Drive) หรือใช้ลิงก์ภายนอก</Label>
+                    <Label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">ภาพหน้าปก (Thumbnail)</Label>
+                    
+                    <div className="flex flex-col gap-3">
+                      <div className="flex items-center gap-2">
+                        <Input 
+                          type="file" 
+                          ref={coverInputRef}
+                          accept="image/*"
+                          onChange={(e) => setCoverToUpload(e.target.files ? e.target.files[0] : null)}
+                          className="bg-[#0a0a0a] border-white/10 text-white file:text-white file:bg-zinc-700 file:border-0 file:mr-4 file:px-4 hover:file:bg-zinc-600 cursor-pointer h-11 py-2"
+                        />
+                        {coverToUpload && (
+                          <Button type="button" variant="ghost" size="sm" onClick={() => { setCoverToUpload(null); if(coverInputRef.current) coverInputRef.current.value = ''; }} className="text-red-400 hover:text-red-300 hover:bg-red-400/10">ล้างไฟล์</Button>
+                        )}
+                      </div>
+                      <div className="text-center text-xs text-zinc-500 font-semibold uppercase">หรือวางลิงก์รูปภาพ</div>
+                      <Input id="coverUrl" value={formData.coverUrl} onChange={e => setFormData({...formData, coverUrl: e.target.value})} disabled={!!coverToUpload} className="bg-[#0a0a0a] border-white/10 focus-visible:ring-indigo-500 text-white h-11 disabled:opacity-50" placeholder="https://..." />
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 border border-white/5 p-4 rounded-xl bg-[#1a1a1f]">
+                    <Label className="text-xs font-semibold uppercase tracking-wider text-zinc-400">แนบไฟล์สื่อ (อัปโหลดเข้า Drive) หรือใช้ลิงก์ภายนอก</Label>
                     
                     <div className="flex flex-col gap-3">
                       <div className="flex items-center gap-2">

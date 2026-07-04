@@ -19,6 +19,7 @@ export interface MediaItem {
   problems?: string;
   suggestions?: string;
   createdAt: string;
+  coverUrl?: string;
 }
 
 export type MediaInput = Omit<

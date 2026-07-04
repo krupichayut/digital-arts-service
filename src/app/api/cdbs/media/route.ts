@@ -30,6 +30,7 @@ const MEDIA_HEADERS = [
   "problems",
   "suggestions",
   "createdAt",
+  "coverUrl",
 ];
 
 const mediaSheetConfig = {
@@ -72,6 +73,7 @@ const toMediaItem = (record: MediaRecord): MediaItem => ({
   problems: record.problems || "-",
   suggestions: record.suggestions || "-",
   createdAt: record.createdAt || new Date().toISOString(),
+  coverUrl: record.coverUrl || "-",
 });
 
 const toMediaRecord = (item: MediaItem): MediaRecord => ({
@@ -93,6 +95,7 @@ const toMediaRecord = (item: MediaItem): MediaRecord => ({
   problems: item.problems || "-",
   suggestions: item.suggestions || "-",
   createdAt: item.createdAt,
+  coverUrl: item.coverUrl || "-",
 });
 
 const configurationError = () =>

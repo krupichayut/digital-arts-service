@@ -159,8 +159,23 @@ export default function Home() {
                     className={`group relative overflow-hidden flex flex-col p-8 transition-shadow hover:shadow-2xl ${bentoClass}`}
                   >
                     {/* Background Graphic elements for some bento boxes */}
-                    {isHero && (
+                    {isHero && !item.coverUrl && (
                       <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-500/20 rounded-full blur-3xl -mr-20 -mt-20"></div>
+                    )}
+
+                    {/* Background Image if available */}
+                    {((item.coverUrl && item.coverUrl !== '-') || (item.type === 'Video' && item.youtubeId !== '-')) && (
+                      <>
+                        <div 
+                          className="absolute inset-0 z-0 opacity-10 group-hover:opacity-30 transition-opacity duration-500 mix-blend-overlay"
+                          style={{
+                            backgroundImage: `url(${item.coverUrl && item.coverUrl !== '-' ? item.coverUrl : `https://img.youtube.com/vi/${item.youtubeId}/maxresdefault.jpg`})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                        />
+                        <div className="absolute inset-0 z-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                      </>
                     )}
  
                     <div className="relative z-10 flex flex-col h-full">
